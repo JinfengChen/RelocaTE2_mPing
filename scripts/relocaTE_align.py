@@ -157,13 +157,17 @@ def map_reads_bwa(scripts, flanking_fq, path, genome_file, fastq_dir, target, bw
 
     ##merge all bwa results into one file
     merged_bwa = '%s/bwa_aln/%s.repeat.bwa.bam' %(path, target)
-    if len(bam2merge) > 0:
+    if len(bam2merge) > 1:
         cmd1  = '%s merge %s %s' %(samtools, merged_bwa, ' '.join(bam2merge))
         cmd2  = '%s sort %s %s.sorted' %(samtools, merged_bwa, os.path.splitext(merged_bwa)[0])
         cmd3  = '%s index %s.sorted.bam' %(samtools, os.path.splitext(merged_bwa)[0])
         os.system(cmd1)
         os.system(cmd2)
         os.system(cmd3)
+    elif len(bam2merge) == 1:
+        os.system('cp %s %s' %(bam2merge[0], merged_bwa))
+        os.system('%s sort %s %s.sorted' %(samtools, merged_bwa, os.path.splitext(merged_bwa)[0]))
+        os.system('%s index %s.sorted.bam' %(samtools, os.path.splitext(merged_bwa)[0]))
 
 
 def bowtie_run(path, genome_file, fastq, fq_name, target, bowtie2, relax_align, bowtie_sam, readclass):
@@ -303,7 +307,8 @@ def main():
 
     #overwrite tools
     blat = '/opt/linux/centos/7.x/x86_64/pkgs/blat/35/bin/blat'
-    bwa = '/opt/bwa/0.7.9/bin/bwa'
+    #bwa = '/opt/bwa/0.7.9/bin/bwa'
+    bwa  = '/rhome/cjinfeng/BigData/00.RD/RelocaTE2/tools/bwa-0.6.2/bwa'
     bowtie2  = '/opt/bowtie2/2.2.3/bowtie2'
     bedtools = '/opt/bedtools/2.17.0-25-g7b42b3b/bin//bedtools'
     samtools = '/opt/samtools/0.1.19/bin/samtools'

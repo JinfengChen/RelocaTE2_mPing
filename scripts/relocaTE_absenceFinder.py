@@ -911,7 +911,8 @@ def main():
 
     #overwrite tools
     blat = '/opt/linux/centos/7.x/x86_64/pkgs/blat/35/bin/blat'
-    bwa = '/opt/bwa/0.7.9/bin/bwa'
+    #bwa = '/opt/bwa/0.7.9/bin/bwa'
+    bwa  = '/rhome/cjinfeng/BigData/00.RD/RelocaTE2/tools/bwa-0.6.2/bwa'
     bowtie2  = '/opt/bowtie2/2.2.3/bowtie2'
     bedtools = '/opt/bedtools/2.17.0-25-g7b42b3b/bin//bedtools'
     samtools = '/opt/samtools/0.1.19/bin/samtools'
