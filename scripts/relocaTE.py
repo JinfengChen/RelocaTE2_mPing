@@ -217,7 +217,8 @@ def main():
         fastas[fa1] = fq1
         fastas[fa2] = fq2
         if not os.path.isfile(subbam):
-            cmd_step2.append('%s view -h %s | awk \'$5<60\' | samtools view -Shb - | samtools sort -m 500000000 -n - %s 2> %s' %(samtools, bam, os.path.splitext(subbam)[0], run_std))
+            #cmd_step2.append('%s view -h %s | awk \'$5<60\' | samtools view -Shb - | samtools sort -m 500000000 -n - %s 2> %s' %(samtools, bam, os.path.splitext(subbam)[0], run_std))
+            cmd_step2.append('%s sort -m 1000000000 -n %s %s 2> %s' %(samtools, bam, os.path.splitext(subbam)[0], run_std))
         if not os.path.isfile(fq1) and not os.path.isfile(fq2):
             cmd_step2.append('%s bamtofastq -i %s -fq %s -fq2 %s 2> %s' %(bedtools, subbam, fq1, fq2, run_std))
         cmd_step2.append('%s seq -A %s > %s' %(seqtk, fq1, fa1))
@@ -280,15 +281,15 @@ def main():
     #step6 find transposons on reference: reference only or shared
     createdir('%s/shellscripts/step_6' %(args.outdir))
     step6_count = 0
-    if mode == 'fastq':
+    if mode == 'fastq' or mode == 'bam':
         for chrs in ids:
             step6_cmd = 'python %s/relocaTE_absenceFinder.py %s/repeat/bwa_aln/%s.repeat.bwa.sorted.bam %s %s repeat %s/regex.txt not.give 100 %s 0 0 %s' %(RelocaTE_bin, args.outdir, ref, chrs, reference, args.outdir, reference_ins_flag, args.size)
             step6_file= '%s/shellscripts/step_6/%s.repeat.absence.sh' %(args.outdir, step6_count)
             shells.append('sh %s' %(step6_file))
             writefile(step6_file, step6_cmd)
             step6_count +=1
-    elif mode == 'bam':
-        pass
+    #elif mode == 'bam':
+    #    pass
  
     #step7 characterize homozygous, heterozygous and somatic insertion
     createdir('%s/shellscripts/step_7' %(args.outdir))
